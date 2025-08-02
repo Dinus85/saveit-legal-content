@@ -1,0 +1,113 @@
+name: Auto Update Content Metadata
+
+# Si attiva quando vengono modificati i file JSON
+on:
+  push:
+    paths:
+      - '*.json'
+    branches:
+      - main
+
+jobs:
+  update-metadata:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        
+    - name: Auto-update JSON metadata
+      run: |
+        # Function to update JSON file
+        update_json_file() {
+          local file=$1
+          if [ -f "$file" ]; then
+            echo "📄 Updating $file..."
+            
+            # Get current timestamp
+            current_time=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+            
+            # Read current version
+            current_version=$(jq -r '.version // "1.0"' "$file")
+            
+            # Increment version (increment patch number)
+            if [[ $current_version =~ ^([0-9]+)\.([0-9]+)$ ]]; then
+              major=${BASH_REMATCH[1]}
+              minor=${BASH_REMATCH[2]}
+              new_version="$major.$((minor + 1))"
+            elif [[ $current_version =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+              major=${BASH_REMATCH[1]}
+              minor=${BASH_REMATCH[2]}
+              patch=${BASH_REMATCH[3]}
+              new_version="$major.$minor.$((patch + 1))"
+            else
+              new_version="1.1"
+            fi
+            
+            echo "📅 Current time: $current_time"
+            echo "🏷️  Version: $current_version → $new_version"
+            
+            # Update JSON with new timestamp and version
+            jq --arg time "$current_time" --arg version "$new_version" \
+               '.lastUpdated = $time | .version = $version' \
+               "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+               
+            echo "✅ Updated $file successfully"
+          else
+            echo "❌ File $file not found"
+          fi
+        }
+        
+        # Update all JSON files
+        for file in *.json; do
+          if [ -f "$file" ]; then
+            update_json_file "$file"
+          fi
+        done
+        
+    - name: Check for changes
+      id: changes
+      run: |
+        if git diff --quiet; then
+          echo "No changes to commit"
+          echo "changed=false" >> $GITHUB_OUTPUT
+        else
+          echo "Changes detected"
+          echo "changed=true" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Commit and push changes
+      if: steps.changes.outputs.changed == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # Add all modified JSON files
+        git add *.json
+        
+        # Create commit message with file details
+        commit_message="🤖 Auto-update content metadata
+
+        - Updated lastUpdated timestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+        - Auto-incremented version numbers
+        - Files updated: $(git diff --cached --name-only | tr '\n' ' ')
+        
+        [skip ci]"
+        
+        git commit -m "$commit_message"
+        git push
+        
+    - name: Summary
+      if: steps.changes.outputs.changed == 'true'
+      run: |
+        echo "🎉 Content metadata updated successfully!"
+        echo "📅 Timestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+        echo "📁 Files processed:"
+        git diff HEAD~1 --name-only | grep '\.json$' || echo "No JSON files changed"
