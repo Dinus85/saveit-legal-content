@@ -1,6 +1,6 @@
 {
   "title": "Centro Assistenza Aggiornato",
   "content": "# Centro Assistenza SaveIt (da GitHub)\n\n**Contenuto remoto sempre aggiornato!**\n\n## FAQ Principali\n\n### 📁 Creare Cartelle\n- Premi + nella home\n- Tieni premuto spazio vuoto\n- Comando vocale \"Crea cartella\"\n\n### 🔗 Salvare Link\n- Condividi da altre app → SaveIt\n- Estensione browser (Chrome/Firefox)\n- Drag & drop su desktop\n\n### 🔍 Ricerca Avanzata\n- #tag - cerca hashtag\n- tipo:video - filtra tipo\n- data:2024 - filtra anno\n- Ricerca vocale disponibile\n\n### 🎨 Temi\n- Scuro/Chiaro/Auto\n- Segue sistema\n- Modalità Solarized\n\n## Problemi Comuni\n\n### App si blocca\n1. Chiudi e riapri\n2. Pulisci cache\n3. Riavvia dispositivo\n4. Modalità recovery\n\n### Dati persi\n1. Account → Backup → Ripristina\n2. Cronologia versioni\n3. Recupero cestino (30gg)\n4. Restore cloud\n\n## Contatti\n- Email: help@saveit.app\n- Response: 24-48h\n- Lingue: IT, EN\n- Bug reports: bugs@saveit.app\n\n---\n*Assistenza aggiornata automaticamente da GitHub*",
-  "lastUpdated": "2025-08-02T21:02:09Z",
-  "version": "2.2"
+  "lastUpdated": "2025-08-02T21:05:13Z",
+  "version": "2.3"
 }
