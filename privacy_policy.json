@@ -5,7 +5,6 @@
     "last_updated": "2025-10-29",
     "language": "it",
     "contact_email": "info@saveit.com",
-    
     "sections": [
       {
         "title": "1. Introduzione",
@@ -95,12 +94,13 @@
         "content": "Per qualsiasi domanda riguardante questa Privacy Policy o il trattamento dei tuoi dati personali:\n\nEmail: info@saveit.com\n\nSiamo a tua disposizione per chiarimenti e per aiutarti a esercitare i tuoi diritti."
       }
     ],
-    
     "gdpr_compliance": {
       "regulation": "Regolamento (UE) 2016/679",
       "jurisdiction": "Italia",
       "supervisory_authority": "Garante per la Protezione dei Dati Personali",
       "authority_website": "https://www.garanteprivacy.it"
     }
-  }
+  },
+  "lastUpdated": "2025-10-29T12:39:41Z",
+  "version": "1.1"
 }
